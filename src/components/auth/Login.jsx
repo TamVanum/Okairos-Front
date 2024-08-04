@@ -1,58 +1,77 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Card, Input, Button, Typography } from 'antd';
+import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import AuthService from '../../services/AuthService';
+import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/temporalLogo.svg';
+
+const { Title } = Typography;
+
+const LoginSchema = Yup.object().shape({
+    email: Yup.string().email('Email inválido').required('Email es requerido'),
+    password: Yup.string().required('Contraseña es requerida'),
+});
 
 function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        AuthService.signIn(email, password)
+    const handleSubmit = (values, { setSubmitting }) => {
+        AuthService.signIn(values.email, values.password)
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log('Usuario logueado:', user);
-            }
-            ).catch((error) => {
+                navigate('/');
+            })
+            .catch((error) => {
                 console.error('Error al iniciar sesión:', error);
+            })
+            .finally(() => {
+                setSubmitting(false);
             });
     };
-    const [value, setValue] = useState('horizontal');
+
     return (
-        <div>
-            <h2>Iniciar sesión</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={handleEmailChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Contraseña:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                    />
-                </div>
-                <button type="submit">Iniciar sesión</button>
-            </form>
+        <div className="flex h-screen flex-col lg:flex-row">
+            <div className="lg:w-1/4 bg-green-600 flex items-center justify-center p-8">
+                <Title className="text-white" level={2}>Bienvenido</Title>
+            </div>
+            <div className="lg:w-3/4 flex items-center justify-center p-8 content-center">
+                <Card className="w-full max-w-md shadow-lg ">
+                    {/* <img src={logo} className='size-48 justify-center' alt="" /> */}
+                    <Title level={2} className="text-center">Iniciar sesión</Title>
+                    <Formik
+                        initialValues={{ email: '', password: '' }}
+                        validationSchema={LoginSchema}
+                        onSubmit={handleSubmit}
+                    >
+                        {formik => (
+                            <FormikForm className="space-y-4">
+                                <div>
+                                    <label htmlFor="email">Email:</label>
+                                    <Field
+                                        name="email"
+                                        as={Input}
+                                    />
+                                    <ErrorMessage name="email" component="div" className="text-red-500 text-xs mt-1" />
+                                </div>
+                                <div>
+                                    <label htmlFor="password">Contraseña:</label>
+                                    <Field
+                                        name="password"
+                                        as={Input.Password}
+                                    />
+                                    <ErrorMessage name="password" component="div" className="text-red-500 text-xs mt-1" />
+                                </div>
+                                <Button type="primary" htmlType="submit" className="w-full" disabled={formik.isSubmitting}>
+                                    Iniciar sesión
+                                </Button>
+                            </FormikForm>
+                        )}
+                    </Formik>
+                </Card>
+            </div>
         </div>
-
-
-
     );
 }
 
