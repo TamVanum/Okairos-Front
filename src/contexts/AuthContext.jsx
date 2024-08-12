@@ -1,23 +1,30 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import AuthService from '../services/AuthService';
+import { create } from "zustand";
 
-const AuthContext = createContext();
+const useAuthStore = create((set) => ({
+    token: localStorage.getItem('accessToken') || null,
+    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+    setToken: (token) => {
+        localStorage.setItem('accessToken', token.access);
+        localStorage.setItem('uid', token.uuid);
+        set({ token });
+    },
+    clearToken: () => {
+        localStorage.removeItem('accessToken');
+        set({ token: null });
+    },
 
-  useEffect(() => {
-    const unsubscribe = AuthService.onAuthStateChanged(setUser);
-    return () => unsubscribe();
-  }, []);
+    setUser: (user) => {
+        localStorage.setItem('user', JSON.stringify(user));
+        set({ user });
+    },
 
-  return (
-    <AuthContext.Provider value={{ user }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+    clearUser: () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('accessToken');
+        set({ user: null, token: null });
+    }
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+}));
+
+export default useAuthStore;

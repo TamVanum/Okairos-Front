@@ -1,22 +1,13 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import AuthService from '../services/AuthService';
+import useAuthStore from "../contexts/AuthContext"
 
-const AuthContext = createContext();
-
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    AuthService.onAuthStateChanged(setUser);
-  }, []);
-
-  return (
-    <AuthContext.Provider value={{ user }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+    const user = useAuthStore(state => state.user);
+    const token = useAuthStore(state => state.token);
+    const setUser = useAuthStore(state => state.setUser);
+    const setToken = useAuthStore(state => state.setToken);
+    const clearUser = useAuthStore(state => state.clearUser);
+    
+    return { user, token, setUser, setToken, clearUser };
+
 };

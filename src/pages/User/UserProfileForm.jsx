@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Input, Button, notification } from 'antd';
 import UserProfile from '../../components/UserProfileForm/UserProfile';
+import { useUser } from '../../hooks/useUser';
 
 const UserProfileSchema = Yup.object().shape({
   name: Yup.string().required('El nombre es obligatorio'),
@@ -10,20 +11,17 @@ const UserProfileSchema = Yup.object().shape({
   email: Yup.string().email('Correo electrónico inválido').required('El correo electrónico es obligatorio'),
 });
 
+
+
 const UserProfileForm = () => {
-  const [user, setUser] = useState({
-    avatar: 'https://www.thoughtco.com/thmb/0SGYVQodewCH8H9tOFqqYhKLrsM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/mike-tyson-kicks-off-australia-speaking-tour-in-brisbane-156502182-5ce081ba44f640c8955e51aa1a939341.jpg',
-    name: 'Nombre de usuario',
-    lastName: 'Apellido de usuario',
-    email: 'usuario@ejemplo.com',
-  });
+  const user = useUser();
 
   const handleAvatarChange = (event) => {
     const file = event.currentTarget.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setUser((prevUser) => ({ ...prevUser, avatar: reader.result }));
+        setUserData((prevUser) => ({ ...prevUser, avatar: reader.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -42,9 +40,18 @@ const UserProfileForm = () => {
   return (
     <div className="flex justify-center">
       <div className="flex flex-col items-center justify-center p-4 border-2 w-full md:w-1/3">
+        
+        <div className='flex flex-row w-full justify-between gap-4'>
+          <Button type="primary" danger className="mb-4">
+            Actualizar Plan
+          </Button>
+          <Button type="default" className="mb-4">
+            Actualizar Contraseña
+          </Button>
+        </div>
         <UserProfile user={user} onEditAvatar={handleAvatarChange} />
         <Formik
-          initialValues={{ name: user.name, lastName: user.lastName, email: user.email }}
+          initialValues={{ name: user.name, lastname: user.lastname, email: user.email }}
           validationSchema={UserProfileSchema}
           onSubmit={handleSubmit}
         >
@@ -61,7 +68,7 @@ const UserProfileForm = () => {
               </div>
               <div>
                 <Field
-                  name="lastName"
+                  name="lastname"
                   as={Input}
                   placeholder="Apellido"
                   className="w-full"
@@ -84,9 +91,7 @@ const UserProfileForm = () => {
             </Form>
           )}
         </Formik>
-        <Button type="default" className="mt-4">
-          Actualizar Contraseña
-        </Button>
+
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ const dataSource = [
         name: 'Mike',
         last_name: 'Doe',
         email: 'example1@gmail.com',
+        plan: 'Plan Pro',
         application_date: 32,
     },
     {
@@ -15,6 +16,7 @@ const dataSource = [
         name: 'John',
         last_name: 'Doe',
         email: 'example1@gmail.com',
+        plan: 'Plan Basico',
         application_date: 42,
     },
 ];
@@ -56,7 +58,7 @@ const columns = [
         key: 'detail',
         render: () => (
             <Link to="/admin/user-request/1">
-                <div className="flex items-center justify-center w-fit rounded-full bg-orange-400  hover:bg-orange-500 cursor-pointer">
+                <div className="flex items-center justify-center w-fit rounded-full bg-orange-400  hover:bg-primary-500 cursor-pointer">
                     <SearchOutlined className="text-3xl m-1.5 text-white" />
                 </div>
             </Link>

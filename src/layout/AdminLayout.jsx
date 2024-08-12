@@ -27,7 +27,12 @@ const menuItems = [
     {
         key: '3',
         icon: <DesktopOutlined />,
-        label: <Link to="/admin/user-request">Mis Plantas</Link>,
+        label: <Link to="/admin/user-request">Peticiones de Usuarios</Link>,
+    },
+    {
+        key: '4',
+        icon: <DesktopOutlined />,
+        label: <Link to="/admin/users">Usuarios</Link>,
     },
 ];
 
@@ -40,7 +45,7 @@ const AdminLayout = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-    const siderWidth = collapsed ? 80 : 250;
+    const siderWidth = collapsed ? 80 : 300;
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -55,15 +60,16 @@ const AdminLayout = () => {
                 }}
                 theme={themeState}
                 width={siderWidth}
-                style={{ position: 'fixed', height: '100vh', borderRight: '1px solid grey' }}
+                style={{ position: 'fixed', height: '100vh', borderRight: '1px solid grey', zIndex: isMobile ? 100 : 'auto', }}
             >
                 <div className="flex flex-col items-center p-4">
                     <UserProfileCard collapsed={collapsed} />
                 </div>
                 <Menu theme={themeState} defaultSelectedKeys={['1']} mode="inline" items={menuItems} />
             </Sider>
-            <Layout className='bg-gray-50' style={{ marginLeft: isMobile && collapsed ? 0 : siderWidth, transition: 'margin-left 0.2s' }}>
-                <div className="flex my-4 mx-4 bg-orange-500 rounded-lg p-6 items-center justify-between">
+            {/* <Layout className='bg-gray-50' style={{ marginLeft: isMobile && collapsed ? 0 : siderWidth, transition: 'margin-left 0.2s' }}> */}
+            <Layout className='bg-gray-50' style={{ marginLeft: isMobile ? 0 : siderWidth, transition: 'margin-left 0.2s' }}>
+                <div className="flex my-4 mx-4 bg-primary-500 rounded-lg p-6 items-center justify-between">
                     <img className="h-fit" src={temporalLogo} alt="Logo" />
                     <Tooltip title="Cerrar Sesion">
                         <div className="flex items-center justify-center rounded-full bg-white hover:bg-gray-300 cursor-pointer">
@@ -71,11 +77,13 @@ const AdminLayout = () => {
                         </div>
                     </Tooltip>
                 </div>
+                {/* {collapsed && (  */}
                 <Content className='bg-white rounded-lg mx-4' style={{ paddingTop: 64 }}>
                     <div className='-mt-12'>
                         <Outlet />
                     </div>
                 </Content>
+                {/* )} */}
             </Layout>
         </Layout>
     );

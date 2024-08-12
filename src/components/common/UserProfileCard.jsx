@@ -1,13 +1,26 @@
 import React from 'react';
-import { Avatar, Typography, Tag, Tooltip, Button } from 'antd';
+import { Avatar, Typography, Tag, Tooltip, Button, Image } from 'antd';
 import 'tailwindcss/tailwind.css';
+import { useUser } from '../../hooks/useUser';
+import { Link } from 'react-router-dom';
 
 const UserProfileCard = ({ collapsed }) => {
 
+    const user = useUser();
     return (
-        <div className={`flex w-full flex-col items-start justify-end h-fit bg-cover bg-center ${collapsed ? "mt-4" : "bg-orange-500 p-4"} rounded-xl`}>
-            <div className={`flex justify-between ${collapsed ? "": "w-full"}`}>
-                <Avatar className="bg-purple-500 mb-2" size={56} src={<img src='https://www.thoughtco.com/thmb/0SGYVQodewCH8H9tOFqqYhKLrsM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/mike-tyson-kicks-off-australia-speaking-tour-in-brisbane-156502182-5ce081ba44f640c8955e51aa1a939341.jpg' />}>N</Avatar>
+        <div className={`flex w-full flex-col items-start justify-end h-fit bg-cover bg-center ${collapsed ? "mt-4" : "bg-primary-500 p-4"} rounded-xl`}>
+            <div className={`flex justify-between ${collapsed ? "" : "w-full"}`}>
+                <Link to={"/customer/profile"} >
+                    <Avatar
+                        className="bg-error-400 mb-2"
+                        size={56}
+                        src={user.avatar.length > 1 ? user.avatar : null}
+                    >
+                        {user.avatar.length == 1 && (
+                            <Typography className="text-2xl text-white">{user.avatar}</Typography>
+                        )}
+                    </Avatar>
+                </Link>
                 {!collapsed && (
                     <Tooltip placement="rightTop" title={"Plan ql pro"}>
                         <Tag color="purple" className="h-fit">Plan</Tag>
@@ -17,7 +30,7 @@ const UserProfileCard = ({ collapsed }) => {
             <div className="flex flex-row items-center">
                 {!collapsed && (
                     <>
-                        <Typography className="text-white font-medium">Nombre de usuario</Typography>
+                        <Typography className="text-white font-medium">{user.name} {user.lastname}</Typography>
                     </>
                 )}
             </div>

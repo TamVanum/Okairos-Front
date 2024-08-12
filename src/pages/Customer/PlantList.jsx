@@ -45,7 +45,7 @@ const columns = [
         key: 'detail',
         render: () => (
             <Link to="/customer/plants/1">
-                <div className="flex items-center justify-center w-fit rounded-full bg-orange-400  hover:bg-orange-500 cursor-pointer">
+                <div className="flex items-center justify-center w-fit rounded-full bg-orange-400  hover:bg-primary-500 cursor-pointer">
                     <SearchOutlined className="text-3xl m-1.5 text-white" />
                 </div>
             </Link>
@@ -57,9 +57,9 @@ const PlantList = () => {
     return (
         // <ConfigProvider locale={customLocale}>
         <div className="flex justify-center rounded-xl">
-            <div className="flex flex-col w-full  p-6 rounded-lg">
+            <div className="flex flex-col w-full  p-6 rounded-lg bg">
                 <Typography.Title level={2}>Mis Plantas</Typography.Title>
-                <Table className="w-full" dataSource={dataSource} columns={columns} />;
+                <Table className="w-full bg" dataSource={dataSource} columns={columns} />
             </div>
         </div>
         // </ConfigProvider>
