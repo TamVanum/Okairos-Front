@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/temporalLogo.svg';
 import useAuthStore from '../../contexts/AuthContext';
 import axios from 'axios';
+import axiosInstance from '../../api/AxiosInstance';
 
 const { Title } = Typography;
 
@@ -24,30 +25,22 @@ function Login() {
         try {
             setSubmitting(true);
 
-            // 1. Autenticar usuario
             const userCredential = await AuthService.signIn(values.email, values.password);
             const user = userCredential.user;
-
-            // 2. Obtener token de acceso
             const token = {
                 access: await user.getIdToken(),
                 uid: user.uid
             };
 
-            // 3. Almacenar token
             setToken(token);
 
-            // 4. Obtener datos del usuario desde la API
-            const response = await axios.post('http://localhost:3000/api/users/uid', { uid: token.uid });
+            const response = await axiosInstance.get('/users/me');
+            
             setUser(response.data);
 
-            // 5. Navegar a la página principal (si es necesario)
             navigate('/customer');
-
-            console.log('Usuario logueado y datos obtenidos:', response.data);
         } catch (error) {
             console.error('Error durante el proceso de autenticación:', error);
-            // Podrías mostrar una notificación al usuario sobre el error
         } finally {
             setSubmitting(false);
         }

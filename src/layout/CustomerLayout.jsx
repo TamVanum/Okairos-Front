@@ -74,10 +74,10 @@ const CustomerLayout = () => {
                 <div className="flex flex-col items-center p-4">
                     <UserProfileCard collapsed={collapsed} />
                 </div>
-                <Menu theme={themeState} defaultSelectedKeys={['1']} mode="inline" items={menuItems} />
+                <Menu theme={themeState} defaultSelectedKeys={['2']} mode="inline" items={menuItems} />
             </Sider>
             {/* <Layout className='bg-gray-50' style={{ marginLeft: isMobile && collapsed ? 0 : siderWidth, transition: 'margin-left 0.2s' }}> */}
-            <Layout className='bg-bgContainer-300' style={{ marginLeft: isMobile ? 0 : siderWidth, transition: 'margin-left 0.2s' }}>
+            <Layout className='bg-bgContainer2-300' style={{ marginLeft: isMobile ? 0 : siderWidth, transition: 'margin-left 0.2s' }}>
                 <div className="flex my-4 mx-4 bg-primary-500 rounded-lg p-6 items-center justify-between">
                     <img className="h-fit" src={temporalLogo} alt="Logo" />
                     <Tooltip title="Cerrar Sesion">

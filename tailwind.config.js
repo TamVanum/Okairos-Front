@@ -50,6 +50,14 @@ export default {
           400: "#f2eee0",
           500: "#f3ead8",
         },
+        bgContainer2: {
+          100: "#ccccb4",
+          200: "#d4d0b8",
+          300: "#cec7b5",
+          400: "#ccc4b4",
+        },
+        cBlue: "#51abcb",
+        cGreen: "#1e985e",
       }
 
     },

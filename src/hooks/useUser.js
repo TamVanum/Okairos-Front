@@ -6,12 +6,16 @@ export const useUser = () => {
     const user = useAuthStore(state => state.user);
     const setUser = useAuthStore(state => state.setUser);
 
-    const [userData, _] = useState({
+    const [userData, setUserData] = useState({
         name: user.name || 'default',
         lastname: user.lastname || 'default',
         email: user.email || 'example@gmail.com',
         avatar: user.avatar || 'D',
-    });
+    }) ;
 
-    return userData;
+    const updateUserData = (data) => {
+        setUserData(data);
+        setUser(data);
+    }
+    return { userData, updateUserData };
 }

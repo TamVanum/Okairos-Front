@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 
 const UserProfileCard = ({ collapsed }) => {
 
-    const user = useUser();
+    const { userData } = useUser();
+    
     return (
         <div className={`flex w-full flex-col items-start justify-end h-fit bg-cover bg-center ${collapsed ? "mt-4" : "bg-primary-500 p-4"} rounded-xl`}>
             <div className={`flex justify-between ${collapsed ? "" : "w-full"}`}>
@@ -14,10 +15,10 @@ const UserProfileCard = ({ collapsed }) => {
                     <Avatar
                         className="bg-error-400 mb-2"
                         size={56}
-                        src={user.avatar.length > 1 ? user.avatar : null}
+                        src={userData.avatar.length > 1 ? userData.avatar : null}
                     >
-                        {user.avatar.length == 1 && (
-                            <Typography className="text-2xl text-white">{user.avatar}</Typography>
+                        {userData.avatar.length == 1 && (
+                            <Typography className="text-2xl text-white">{userData.avatar}</Typography>
                         )}
                     </Avatar>
                 </Link>
@@ -30,7 +31,7 @@ const UserProfileCard = ({ collapsed }) => {
             <div className="flex flex-row items-center">
                 {!collapsed && (
                     <>
-                        <Typography className="text-white font-medium">{user.name} {user.lastname}</Typography>
+                        <Typography className="text-white font-medium">{userData.name} {userData.lastname}</Typography>
                     </>
                 )}
             </div>

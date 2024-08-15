@@ -1,30 +1,29 @@
 import axios from "axios";
-import { useAuth } from "../hooks/useAuth";
+import useAuthStore from "../contexts/AuthContext";
+// import { useAuth } from "../hooks/useAuth";
 
 const BASE_URL_DEV = 'http://localhost:3000/api';
-// const BASE_URL_PROD = 'http://localhost:3000/api';
+const BASE_URL_PROD = 'http://localhost:3000/api';
 
+// Determinar la URL de base según el entorno
+const baseURL = process.env.NODE_ENV === 'development' ? BASE_URL_DEV : BASE_URL_PROD;
 
-const axiosInstance = () => {
-    const { token } = useAuth();
-    return axios.create({
-        baseURL: BASE_URL_DEV,
-        auth: {
-            Token: token,
-        },
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-};
-// export const axiosInstance = axios.create({
-//     baseURL: BASE_URL_DEV,
-//     auth: {
-//         Token: useAuth().token,
-//     },
-//     headers: {
-//         "Content-Type": "application/json",
-//     },
-// });
+// Crear una instancia de Axios con la URL de base
+const axiosInstance = axios.create({
+    baseURL
+});
+
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = useAuthStore.getState().token;
+        if (token) {
+            config.headers['Authorization'] = `Token ${token.access}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 export default axiosInstance;

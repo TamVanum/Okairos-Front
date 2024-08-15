@@ -6,7 +6,6 @@ const useAuthStore = create((set) => ({
 
     setToken: (token) => {
         localStorage.setItem('accessToken', token.access);
-        localStorage.setItem('uid', token.uuid);
         set({ token });
     },
     clearToken: () => {
@@ -15,6 +14,9 @@ const useAuthStore = create((set) => ({
     },
 
     setUser: (user) => {
+        if (user.auth_uid){
+            delete user.auth_uid;
+        }
         localStorage.setItem('user', JSON.stringify(user));
         set({ user });
     },

@@ -1,11 +1,12 @@
 import { blue, green, orange, purple, yellow } from "@ant-design/colors";
 
+
 export const tailwindColorOptions = {
-    1: "bg-blue-500",
-    2: "bg-green-500",
-    3: "bg-orange-500",
-    4: "bg-violet-500",
-    5: "bg-yellow-500",
+    1: "bg-cBlue",
+    2: "bg-warning-500",
+    3: "bg-info-500",
+    4: "bg-primary-500",
+    5: "bg-error-500",
 };
 
 export const antdColorOptions = {
