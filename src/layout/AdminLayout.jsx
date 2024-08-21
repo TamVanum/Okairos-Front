@@ -34,6 +34,11 @@ const menuItems = [
         icon: <DesktopOutlined />,
         label: <Link to="/admin/users">Usuarios</Link>,
     },
+    {
+        key: '5',
+        icon: <DesktopOutlined />,
+        label: <Link to="/admin/plans">Planes</Link>,
+    },
 ];
 
 const AdminLayout = () => {

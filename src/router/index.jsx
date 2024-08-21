@@ -9,10 +9,16 @@ import UserRequestList from "../pages/Admin/UserRequestList";
 import UserRequestDetail from "../pages/Admin/UserRequestDetail";
 import UserList from "../pages/Admin/UserList";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
+import Plans from "../pages/Admin/Plans";
+import LandingLayout from "../layout/LandingLayout";
+import LandingPage from "../pages/Landing/LandingPage";
 
 
 const routes = createRoutesFromElements(
     <>
+        <Route path="/landing" element={<LandingLayout />} >
+            <Route index element={<LandingPage />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
             <Route path="/customer" element={<CustomerLayout />}>
@@ -28,6 +34,7 @@ const routes = createRoutesFromElements(
             <Route path="user-request" element={<UserRequestList />} />
             <Route path="user-request/:id" element={<UserRequestDetail />} />
             <Route path="users" element={<UserList />} />
+            <Route path="plans" element={<Plans />} />
         </Route>
     </>
 );
