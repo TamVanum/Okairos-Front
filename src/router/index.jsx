@@ -12,10 +12,12 @@ import ProtectedRoute from "../components/auth/ProtectedRoute";
 import Plans from "../pages/Admin/Plans";
 import LandingLayout from "../layout/LandingLayout";
 import LandingPage from "../pages/Landing/LandingPage";
+import WebSocketsTestPage from "../pages/WebSocketsTestPge";
 
 
 const routes = createRoutesFromElements(
     <>
+        <Route path="/test" element={<WebSocketsTestPage />} />
         <Route path="/landing" element={<LandingLayout />} >
             <Route index element={<LandingPage />} />
         </Route>
