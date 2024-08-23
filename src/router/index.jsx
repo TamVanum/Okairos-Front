@@ -13,11 +13,14 @@ import Plans from "../pages/Admin/Plans";
 import LandingLayout from "../layout/LandingLayout";
 import LandingPage from "../pages/Landing/LandingPage";
 import WebSocketsTestPage from "../pages/WebSocketsTestPge";
+import MqttMessageDisplay from "../pages/MqttSocketTest";
 
 
 const routes = createRoutesFromElements(
     <>
-        <Route path="/test" element={<WebSocketsTestPage />} />
+        <Route path="/mqtt" element={<MqttMessageDisplay />} />
+        <Route path="/test" element={<WebSocketsTestPage roomId={"device1"} />} />
+        <Route path="/test2" element={<WebSocketsTestPage roomId={2} />} />
         <Route path="/landing" element={<LandingLayout />} >
             <Route index element={<LandingPage />} />
         </Route>
