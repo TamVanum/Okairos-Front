@@ -17,6 +17,7 @@ axiosInstance.interceptors.request.use(
     (config) => {
         const token = useAuthStore.getState().token;
         if (token) {
+            console.log('Token:', token);
             config.headers['Authorization'] = `Token ${token.access}`;
         }
         return config;

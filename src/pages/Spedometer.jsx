@@ -5,20 +5,24 @@ import 'tailwindcss/tailwind.css';
 
 const { Text } = Typography;
 
-const CustomSpeedometer = ({ value, minimum, maximum }) => {
+const Spedometer = ({ title, value, minimum, maximum }) => {
     const metricDiff = maximum - minimum;
 
     // Calcular el nuevo mínimo y máximo en función del rango
-    const minimumMetricDiff = minimum - (metricDiff * 2);
-    const maximumMetricDiff = maximum + (metricDiff * 2);
+    const minimummetricdif = minimum - (metricDiff * 2);
+    const maximummetricdif = maximum + (metricDiff * 2);
 
-    const secondMinimumMetricDiff = minimum - metricDiff;
-    const secondMaximumMetricDiff = maximum + metricDiff;
+    const secondMinimum = minimum - metricDiff;
+    const secondMaximum = maximum + metricDiff;
 
+    console.log('minimummetricdif:', minimummetricdif);
+    console.log('maximummetricdif:', maximummetricdif);
     console.log('metricDiff:', metricDiff);
 
+    
+
     return (
-        <div className="flex flex-col w-fit mt-6">
+        <div className="flex flex-col items-center justify-center mt-56">
             <ReactSpeedometer
                 value={value}
                 segments={8}
@@ -32,24 +36,25 @@ const CustomSpeedometer = ({ value, minimum, maximum }) => {
                 ]}
                 // Calculamos los stops de los segmentos basados en el nuevo mínimo y máximo
                 customSegmentStops={[
-                    minimumMetricDiff, 
-                    secondMinimumMetricDiff, 
+                    minimummetricdif, 
+                    secondMinimum, 
                     minimum,
                     maximum,
-                    secondMaximumMetricDiff,
-                    maximumMetricDiff, 
+                    secondMaximum, 
+                    maximummetricdif
                 ]}
                 needleColor="black"
                 needleTransitionDuration={4000}
                 needleTransition="easeElastic"
                 currentValueText="Valor Actual: ${value}"
-                minValue={minimumMetricDiff}
-                maxValue={maximumMetricDiff}
+                minValue={minimummetricdif}
+                maxValue={maximummetricdif}
                 width={300}
                 ringWidth={30}
             />
+            <Text className="mt-4 text-lg font-medium">{title}</Text>
         </div>
     );
 }
-export default CustomSpeedometer;
-
+export default Spedometer;
+// `#ff471a`,

@@ -20,7 +20,6 @@ function Login() {
     const navigate = useNavigate();
     const setToken = useAuthStore(state => state.setToken);
     const setUser = useAuthStore(state => state.setUser);
-
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
             setSubmitting(true);
@@ -31,6 +30,8 @@ function Login() {
                 access: await user.getIdToken(),
                 uid: user.uid
             };
+
+            console.log('Token:', token);
 
             setToken(token);
 

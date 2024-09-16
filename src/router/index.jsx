@@ -14,10 +14,12 @@ import LandingLayout from "../layout/LandingLayout";
 import LandingPage from "../pages/Landing/LandingPage";
 import WebSocketsTestPage from "../pages/WebSocketsTestPge";
 import MqttMessageDisplay from "../pages/MqttSocketTest";
+import Spedometer from "../pages/Spedometer";
 
 
 const routes = createRoutesFromElements(
     <>
+        <Route path="/spedometer" element={<Spedometer value={600} minimum={1000} maximum={1600} />} />
         <Route path="/mqtt" element={<MqttMessageDisplay />} />
         <Route path="/test" element={<WebSocketsTestPage roomId={"device1"} />} />
         <Route path="/test2" element={<WebSocketsTestPage roomId={2} />} />
@@ -30,7 +32,7 @@ const routes = createRoutesFromElements(
                 <Route index element={<PlantDashboard />} />
                 <Route path="profile" element={<UserProfileForm />} />
                 <Route path="plants" element={<PlantList />} />
-                <Route path="plants/:id" element={<PlantDashboard />} />
+                <Route path="plants/:hydroponicId" element={<PlantDashboard />} />
             </Route>
         </Route>
         <Route path="/admin" element={<AdminLayout />}>

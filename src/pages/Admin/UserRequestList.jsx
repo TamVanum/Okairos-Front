@@ -57,7 +57,7 @@ const columns = [
         dataIndex: 'detail',
         key: 'detail',
         render: () => (
-            <Link to="/admin/user-request/1">
+            <Link to={`/admin/user-request/${1}`}>
                 <div className="flex items-center justify-center w-fit rounded-full bg-orange-400  hover:bg-primary-500 cursor-pointer">
                     <SearchOutlined className="text-3xl m-1.5 text-white" />
                 </div>
