@@ -5,7 +5,7 @@ import {
     UserOutlined,
     LogoutOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, theme, Tooltip } from 'antd';
+import { Button, Layout, Menu, theme, Tooltip } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
 import UserProfileCard from '../components/common/UserProfileCard';
@@ -20,13 +20,13 @@ const { Header, Content, Sider } = Layout;
 const menuItems = [
     {
         key: '1',
-        icon: <UserOutlined />,
-        label: <Link to="/customer/profile">Mi Perfil</Link>,
+        icon: <PieChartOutlined />,
+        label: <Link to="/customer">Home</Link>,
     },
     {
         key: '2',
-        icon: <PieChartOutlined />,
-        label: <Link to="/customer">Dashboard</Link>,
+        icon: <UserOutlined />,
+        label: <Link to="/customer/profile">Mi Perfil</Link>,
     },
     {
         key: '3',
@@ -74,7 +74,7 @@ const CustomerLayout = () => {
                 <div className="flex flex-col items-center p-4">
                     <UserProfileCard collapsed={collapsed} />
                 </div>
-                <Menu theme={themeState} defaultSelectedKeys={['2']} mode="inline" items={menuItems} />
+                <Menu theme={themeState} defaultSelectedKeys={['1']} mode="inline" items={menuItems} />
             </Sider>
             {/* <Layout className='bg-gray-50' style={{ marginLeft: isMobile && collapsed ? 0 : siderWidth, transition: 'margin-left 0.2s' }}> */}
             <Layout className='bg-bgContainer2-300' style={{ marginLeft: isMobile ? 0 : siderWidth, transition: 'margin-left 0.2s' }}>

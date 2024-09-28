@@ -1,4 +1,4 @@
-import { Card, ConfigProvider, Modal, Table, Typography } from "antd";
+import { Button, Card, ConfigProvider, Modal, Table, Typography } from "antd";
 import { Link } from "react-router-dom";
 import { SearchOutlined, ExclamationOutlined } from "@ant-design/icons";
 import axiosInstance from "../../api/AxiosInstance";
@@ -72,6 +72,7 @@ const PlantList = () => {
                 const dataWithKeys = response.data.map((item, index) => ({
                     ...item,
                     key: index + 1,
+                    active: item.active ? "Activo" : "Inactivo",
                 }));
                 setHydroponicData(dataWithKeys);
             } catch (error) {
@@ -91,17 +92,17 @@ const PlantList = () => {
         },
         {
             title: 'Estado',
-            dataIndex: 'status',
-            key: 'status',
+            dataIndex: 'active',
+            key: 'active',
         },
         {
             title: 'Detalle',
             dataIndex: 'detail',
             key: 'detail',
             render: (text, record) => {
-                if (record.currentPlantId) {
+                if (record.active === "Activo") {
                     return (
-                        <Link to={`/customer/plants/${record.id}`}>
+                        <Link to={`/customer/plants/${record.id}/${record.currentCycle}`}>
                             <div className="flex items-center justify-center w-fit rounded-full bg-orange-400 hover:bg-primary-500 cursor-pointer">
                                 <SearchOutlined className="text-3xl m-1.5 text-white" />
                             </div>
@@ -122,7 +123,7 @@ const PlantList = () => {
     ];
 
     return (
-        <>
+        <div className="mx-16 my-20">
             {hydroponicData.length > 0 && (
                 <div className="flex justify-center rounded-xl">
                     <div className="flex flex-col w-full p-6 rounded-lg">
@@ -132,6 +133,9 @@ const PlantList = () => {
 
                     <Modal title="Información" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                         <div>
+                            <div className="flex justify-end">
+                                <Button type="dashed" size="middle" shape="round" className="my-1">Nueva Metrica</Button>
+                            </div>
                             {plantMetricData.map((metricItem) => (
                                 <Card
                                     key={metricItem.id}
@@ -144,8 +148,8 @@ const PlantList = () => {
                                 >
                                     <Typography.Title level={5} className="capitalize">{metricItem.name}</Typography.Title>
                                     <div className="flex flex-col">
-                                        {metricItem.attributes.map((attr) => (
-                                            <div key={metricItem.id}>
+                                        {metricItem.attributes.map((attr, index) => (
+                                            <div key={`${metricItem.key}-${index}`}>
                                                 <span>
                                                     {attriburesMap.get(attr.name)} - Mínimo: {attr.minimum} - Máximo: {attr.maximum}
                                                 </span>
@@ -158,7 +162,7 @@ const PlantList = () => {
                     </Modal>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

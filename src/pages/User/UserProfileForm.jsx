@@ -34,12 +34,12 @@ const UserProfileForm = () => {
     try {
       const profileUpdateResponse = await axiosInstance.patch('/users/me', values);
       const profileData = profileUpdateResponse.data;
-  
+
       let avatarUpdateResponse;
       if (avatar !== null) {
         const avatarFormData = new FormData();
         avatarFormData.append('file', avatar);
-  
+
         avatarUpdateResponse = await axiosInstance.patch('/users/me/avatar', avatarFormData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -50,13 +50,13 @@ const UserProfileForm = () => {
       } else {
         updateUserData(profileData);
       }
-  
+
       // Mostrar notificación de éxito
       notification.success({
         message: 'Perfil Actualizado',
         description: 'Los datos del perfil han sido actualizados exitosamente.',
       });
-  
+
     } catch (error) {
       console.error('Error al actualizar el perfil:', error);
       notification.error({
@@ -70,8 +70,8 @@ const UserProfileForm = () => {
 
 
   return (
-    <div className="flex justify-center">
-      <div className="flex flex-col items-center justify-center p-8  border-2 border-error-200 rounded-xl w-full md:w-2/3 lg:w-1/3">
+    <div className="flex justify-center mx-20 my-20 gap-10">
+      <div className="flex flex-col items-center justify-center p-8 border-2 border-error-200 rounded-xl w-full md:w-2/3 lg:w-1/3">
 
         <div className='flex flex-col lg:flex-row w-full justify-between gap-4'>
           <Button type="primary" danger className="mb-4">
@@ -124,6 +124,14 @@ const UserProfileForm = () => {
           )}
         </Formik>
 
+      </div>
+      <div className='flex flex-col lg:flex-row justify-between gap-4'>
+        <Button type="primary" danger className="mb-4">
+          Actualizar Plan
+        </Button>
+        <Button type="default" className="mb-4">
+          Actualizar Contraseña
+        </Button>
       </div>
     </div>
   );

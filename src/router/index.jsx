@@ -15,6 +15,7 @@ import LandingPage from "../pages/Landing/LandingPage";
 import WebSocketsTestPage from "../pages/WebSocketsTestPge";
 import MqttMessageDisplay from "../pages/MqttSocketTest";
 import Spedometer from "../pages/Spedometer";
+import Home from "../pages/Home";
 
 
 const routes = createRoutesFromElements(
@@ -29,10 +30,10 @@ const routes = createRoutesFromElements(
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
             <Route path="/customer" element={<CustomerLayout />}>
-                <Route index element={<PlantDashboard />} />
+                <Route index element={<Home />} />
                 <Route path="profile" element={<UserProfileForm />} />
                 <Route path="plants" element={<PlantList />} />
-                <Route path="plants/:hydroponicId" element={<PlantDashboard />} />
+                <Route path="plants/:hydroponicId/:currentCycle" element={<PlantDashboard />} />
             </Route>
         </Route>
         <Route path="/admin" element={<AdminLayout />}>

@@ -19,14 +19,14 @@ const PlantDashboard = () => {
     const [msgData, setMsgData] = useState([]);
     const [metrics, setMetrics] = useState([]);
     const { hydroponicId } = useParams();
-    // console.log(hydroponicId);
+    const { currentCycle } = useParams();
+
     useEffect(() => {
         if (hydroponicId) {
             if (!scoket.connected) {
                 scoket.connect();
             }
-            scoket.emit('joinRoom', hydroponicId);
-
+            scoket.emit('joinRoom', currentCycle);
             const handleMessage = (msg) => {
                 try {
                     console.log('Received JSON message:', msg);
@@ -73,7 +73,7 @@ const PlantDashboard = () => {
                         {/* <Typography.Text>Id de la planta: {hydroponicId}</Typography.Text> */}
                         <Button className='w-fit mt-2' onClick={() => scoket.emit('message', 'Hello from client')}>Cambiar Metricas</Button>
                     </div>
-                    <hr className='mt-4'/>
+                    <hr className='mt-4' />
                     <div className="flex flex-col lg:flex-row p-4 gap-4">
                         <div className="lg:w-4/5 flex items-center justify-center p-4">
                             <MultiAxisLineChart />
@@ -88,18 +88,18 @@ const PlantDashboard = () => {
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-12 mt-6">
-                        {metrics.attributes.map((metric, index) => (
-                            <div className='flex flex-col text-center'>
-                                <Typography.Text className='font-semibold text-lg' key={index}>{metric.name}</Typography.Text>
-                                <CustomSpedometer key={index} value={parseFloat(msgData[metric.name])} minimum={metric.minimum} maximum={metric.maximum} />
+                        {metrics.attributes.map((metric) => (
+                            <div key={metric.name} className='flex flex-col text-center'>
+                                <Typography.Text className='font-semibold text-lg' >{metric.name}</Typography.Text>
+                                <CustomSpedometer value={parseFloat(msgData[metric.name])} minimum={metric.minimum} maximum={metric.maximum} />
                             </div>
                         ))}
                     </div>
 
                     <Card title="Métricas de la planta" className="w-full max-w-2xl mx-auto mt-4">
                         <div className="flex flex-col gap-4">
-                            {metrics.attributes.map((metric, index) => (
-                                <div key={index} className="flex justify-between">
+                            {metrics.attributes.map((metric) => (
+                                <div key={metric.name} className="flex justify-between">
                                     <p>{metric.name}</p>
                                     <p>{metric.minimum}</p>
                                     <p>{metric.maximum}</p>
@@ -108,14 +108,14 @@ const PlantDashboard = () => {
                         </div>
                     </Card>
 
-                    <h2>Messages Received:</h2>
+                    {/* <h2>Messages Received:</h2>
                     <ul>
                         {messages.map((msg, index) => (
                             <li key={index}>
                                 {typeof msg === 'object' ? JSON.stringify(msg, null, 2) : msg}
                             </li>
                         ))}
-                    </ul>
+                    </ul> */}
 
                 </>
             ) : (
