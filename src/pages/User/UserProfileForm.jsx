@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Input, Button, notification } from 'antd';
+import { Input, Button, notification, Card, Tag, Select, Menu, Dropdown } from 'antd';
 import UserProfile from '../../components/UserProfileForm/UserProfile';
 import { useUser } from '../../hooks/useUser';
 import axiosInstance from '../../api/AxiosInstance';
+import { SettingOutlined } from '@ant-design/icons';
 
 const UserProfileSchema = Yup.object().shape({
   name: Yup.string().required('El nombre es obligatorio'),
   lastname: Yup.string().required('El apellido es obligatorio'),
   email: Yup.string().email('Correo electrónico inválido').required('El correo electrónico es obligatorio'),
 });
-
-
 
 const UserProfileForm = () => {
   const { userData, updateUserData } = useUser();
@@ -51,7 +50,6 @@ const UserProfileForm = () => {
         updateUserData(profileData);
       }
 
-      // Mostrar notificación de éxito
       notification.success({
         message: 'Perfil Actualizado',
         description: 'Los datos del perfil han sido actualizados exitosamente.',
@@ -70,17 +68,11 @@ const UserProfileForm = () => {
 
 
   return (
-    <div className="flex justify-center mx-20 my-20 gap-10">
-      <div className="flex flex-col items-center justify-center p-8 border-2 border-error-200 rounded-xl w-full md:w-2/3 lg:w-1/3">
+    <div className="flex flex-col lg:flex-row justify-center mx-6 my-10 lg:mx-20 lg:my-20 gap-6 lg:gap-10">
 
-        <div className='flex flex-col lg:flex-row w-full justify-between gap-4'>
-          <Button type="primary" danger className="mb-4">
-            Actualizar Plan
-          </Button>
-          <Button type="default" className="mb-4">
-            Actualizar Contraseña
-          </Button>
-        </div>
+      {/* Columna izquierda - Formulario de perfil */}
+      <div className="flex flex-col items-center justify-center p-6 border-2 border-error-200 rounded-xl w-full lg:w-1/2 xl:w-1/3">
+
         <UserProfile user={userData} onEditAvatar={handleAvatarChange} />
         <Formik
           initialValues={{ name: userData.name, lastname: userData.lastname, email: userData.email }}
@@ -88,7 +80,7 @@ const UserProfileForm = () => {
           onSubmit={(values, { setSubmitting }) => handleSubmit(values, { setSubmitting })}
         >
           {({ isSubmitting }) => (
-            <Form className="w-full max-w-sm space-y-4 mt-4">
+            <Form className="w-full space-y-4 mt-4">
               <div>
                 <Field
                   name="name"
@@ -123,15 +115,21 @@ const UserProfileForm = () => {
             </Form>
           )}
         </Formik>
-
       </div>
-      <div className='flex flex-col lg:flex-row justify-between gap-4'>
-        <Button type="primary" danger className="mb-4">
-          Actualizar Plan
-        </Button>
-        <Button type="default" className="mb-4">
-          Actualizar Contraseña
-        </Button>
+
+      {/* Columna derecha - Tarjetas adicionales */}
+      <div className="flex flex-col gap-6 w-full lg:w-1/2 xl:w-1/3">
+        <Card title="Hydroponicos Vinculados" bordered={false}>
+          <p>Vinculados: 2</p>
+          <p>Restantes: 8</p>
+        </Card>
+        <Card title="Metricas" bordered={false}>
+          <p>Metricas creadas: 4</p>
+        </Card>
+        <Card title="Estado de Cuenta" bordered={false}>
+          <p>Plan actual: <Tag color="magenta">Plan</Tag></p>
+          <p>Costo mensual: $50.000</p>
+        </Card>
       </div>
     </div>
   );

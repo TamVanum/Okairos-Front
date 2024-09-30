@@ -33,6 +33,11 @@ const menuItems = [
         icon: <DesktopOutlined />,
         label: <Link to="/customer/plants">Mis Plantas</Link>,
     },
+    {
+        key: '4',
+        icon: <DesktopOutlined />,
+        label: <Link to="/customer/metrics">Mis Metricas</Link>,
+    },
 ];
 
 const CustomerLayout = () => {

@@ -16,6 +16,7 @@ import WebSocketsTestPage from "../pages/WebSocketsTestPge";
 import MqttMessageDisplay from "../pages/MqttSocketTest";
 import Spedometer from "../pages/Spedometer";
 import Home from "../pages/Home";
+import Metrics from "../pages/Customer/Metrics";
 
 
 const routes = createRoutesFromElements(
@@ -33,6 +34,7 @@ const routes = createRoutesFromElements(
                 <Route index element={<Home />} />
                 <Route path="profile" element={<UserProfileForm />} />
                 <Route path="plants" element={<PlantList />} />
+                <Route path="metrics" element={<Metrics />} />
                 <Route path="plants/:hydroponicId/:currentCycle" element={<PlantDashboard />} />
             </Route>
         </Route>

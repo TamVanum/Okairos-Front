@@ -15,7 +15,6 @@ const CustomSpeedometer = ({ value, minimum, maximum }) => {
     const secondMinimumMetricDiff = minimum - metricDiff;
     const secondMaximumMetricDiff = maximum + metricDiff;
 
-    console.log('metricDiff:', metricDiff);
 
     return (
         <div className="flex flex-col w-fit mt-6">

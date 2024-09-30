@@ -1,26 +1,54 @@
-import React, { useRef } from 'react';
-import { Avatar, Tag, Tooltip, Typography, Button, Image } from 'antd';
-import { EditOutlined, UserOutlined } from '@ant-design/icons';
-import { useAuth } from '../../hooks/useAuth';
+import React, { useRef, useState } from 'react';
+import { Avatar, Tag, Tooltip, Typography, Button, Image, Dropdown, Menu } from 'antd';
+import { EditOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 
 const UserProfile = ({ user, onEditAvatar }) => {
   const fileInputRef = useRef(null);
-  // const { user } = useAuth();
 
   const handleAvatarClick = () => {
     fileInputRef.current.click();
   };
 
+  const handleMenuClick = (e) => {
+    console.log('Click en la opción:', e);
+  };
+
+  const menuItems = [
+    {
+      label: 'Actualizar Plan',
+      key: '1',
+    },
+    {
+      label: 'Actualizar Contraseña',
+      key: '2',
+    },
+  ];
+
   return (
     <div className="flex flex-col w-full items-center justify-end h-fit bg-cover bg-center p-4 bg-primary-500 rounded-xl">
+      <div className='flex flex-col lg:flex-row w-full justify-between gap-4'>
+        <Dropdown
+          menu={{ items: menuItems }} // Replacing 'overlay' with 'menu'
+          trigger={['click']}
+        >
+          <Button
+            type="text"
+            icon={
+              <SettingOutlined
+                style={{ fontSize: '1.3rem' }}
+                className={`text-warning-500 font-bold`}
+              />
+            }
+          />
+        </Dropdown>
+      </div>
       <div className="relative">
-        {/* {user.avatar.length > 1 ? <Image src={user.avatar} alt="Avatar" /> : user } */}
         <Avatar
           className="bg-error-400 mb-2"
           size={100}
           src={user.avatar.length > 1 ? <Image src={user.avatar} /> : null}
         >
-          {user.avatar.length == 1 && (
+          {user.avatar.length === 1 && (
             <Typography className="text-2xl text-white">{user.avatar}</Typography>
           )}
         </Avatar>
