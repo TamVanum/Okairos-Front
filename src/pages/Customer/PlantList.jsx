@@ -1,6 +1,6 @@
-import { Button, Card, ConfigProvider, Table, Typography } from "antd";
+import { Button, Card, ConfigProvider, Spin, Table, Typography } from "antd";
 import { Link } from "react-router-dom";
-import { SearchOutlined, ExclamationOutlined } from "@ant-design/icons";
+import { SearchOutlined, ExclamationOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import MetricSelectionModal from "../../components/HydroponicsList/MetricSelectionModal";
 import { useNavigate } from "react-router-dom";
@@ -115,7 +115,9 @@ const PlantList = () => {
         },
     ];
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div className='flex justify-center items-center h-screen'>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+    </div>;
     if (error) return <div>Error fetching data: {error.message}</div>;
 
     return (

@@ -15,30 +15,12 @@ import temporalLogo from '../assets/react.svg';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../contexts/AuthContext';
 
+
+import { menuItems } from '../router/customerMenuItems';
+
 const { Header, Content, Sider } = Layout;
 
-const menuItems = [
-    {
-        key: '1',
-        icon: <PieChartOutlined />,
-        label: <Link to="/customer">Home</Link>,
-    },
-    {
-        key: '2',
-        icon: <UserOutlined />,
-        label: <Link to="/customer/profile">Mi Perfil</Link>,
-    },
-    {
-        key: '3',
-        icon: <DesktopOutlined />,
-        label: <Link to="/customer/plants">Mis Plantas</Link>,
-    },
-    {
-        key: '4',
-        icon: <DesktopOutlined />,
-        label: <Link to="/customer/metrics">Mis Metricas</Link>,
-    },
-];
+
 
 const CustomerLayout = () => {
     const [isMobile, setIsMobile] = useState(false);

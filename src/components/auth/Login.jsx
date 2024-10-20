@@ -36,10 +36,15 @@ function Login() {
             setToken(token);
 
             const response = await axiosInstance.get('/users/me');
-            
+
             setUser(response.data);
 
-            navigate('/customer');
+            if (response.data.isAdmin === true) {
+                navigate('/admin');
+            } else {
+                navigate('/customer');
+            }
+            
         } catch (error) {
             console.error('Error durante el proceso de autenticación:', error);
         } finally {

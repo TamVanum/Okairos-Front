@@ -39,7 +39,8 @@ const routes = createRoutesFromElements(
             </Route>
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<PlantDashboard />} />
+            {/* <Route index element={<PlantDashboard />} /> */}
+            <Route index element={<Home />} />
             <Route path="profile" element={<UserProfileForm />} />
             <Route path="user-request" element={<UserRequestList />} />
             <Route path="user-request/:id" element={<UserRequestDetail />} />

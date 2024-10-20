@@ -119,16 +119,16 @@ const UserProfileForm = () => {
 
       {/* Columna derecha - Tarjetas adicionales */}
       <div className="flex flex-col gap-6 w-full lg:w-1/2 xl:w-1/3">
+        <Card title="Estado de Cuenta" bordered={false}>
+          <p>Plan actual: <Tag color="magenta">Plan</Tag></p>
+          <p>Costo mensual: $50.000</p>
+        </Card>
         <Card title="Hydroponicos Vinculados" bordered={false}>
           <p>Vinculados: 2</p>
           <p>Restantes: 8</p>
         </Card>
         <Card title="Metricas" bordered={false}>
           <p>Metricas creadas: 4</p>
-        </Card>
-        <Card title="Estado de Cuenta" bordered={false}>
-          <p>Plan actual: <Tag color="magenta">Plan</Tag></p>
-          <p>Costo mensual: $50.000</p>
         </Card>
       </div>
     </div>
