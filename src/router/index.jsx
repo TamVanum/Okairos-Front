@@ -17,6 +17,7 @@ import MqttMessageDisplay from "../pages/MqttSocketTest";
 import Spedometer from "../pages/Spedometer";
 import Home from "../pages/Home";
 import Metrics from "../pages/Customer/Metrics";
+import LinkHydroponic from "../pages/Customer/LinkHydroponic";
 
 
 const routes = createRoutesFromElements(
@@ -35,6 +36,7 @@ const routes = createRoutesFromElements(
                 <Route path="profile" element={<UserProfileForm />} />
                 <Route path="plants" element={<PlantList />} />
                 <Route path="metrics" element={<Metrics />} />
+                <Route path="link-hydroponic" element={<LinkHydroponic />} />
                 <Route path="plants/:hydroponicId/:currentCycle" element={<PlantDashboard />} />
             </Route>
         </Route>

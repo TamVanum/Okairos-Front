@@ -1,0 +1,38 @@
+.qr-reader {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.qr-reader video {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.qr-box {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.qr-frame {
+  width: 80%;
+  max-width: 256px;
+  margin: 0 auto;
+}
+
+.qr-image-uploader {
+  text-align: center;
+}
+
+.ant-card {
+  cursor: pointer;
+}
+
+.ant-card:hover {
+  border-color: #40a9ff;
+}

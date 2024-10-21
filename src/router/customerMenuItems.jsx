@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DesktopOutlined, PieChartOutlined, UserOutlined } from '@ant-design/icons';
+import { DesktopOutlined, OrderedListOutlined, PieChartOutlined, UserOutlined } from '@ant-design/icons';
 
 
 
@@ -22,7 +22,12 @@ export const menuItems = [
     },
     {
         key: '4',
-        icon: <DesktopOutlined />,
+        icon: <OrderedListOutlined />,
         label: <Link to="/customer/metrics">Mis Metricas</Link>,
+    },
+    {
+        key: '5',
+        icon: <OrderedListOutlined />,
+        label: <Link to="/customer/link-hydroponic">Nuevo Hidroponico</Link>,
     },
 ];
