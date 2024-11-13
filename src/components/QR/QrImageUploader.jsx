@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Card, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import QrScanner from "qr-scanner";
+import Title from "antd/es/typography/Title";
 
 const QrImageUploader = ({ onResult }) => {
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,7 @@ const QrImageUploader = ({ onResult }) => {
       style={{ textAlign: "center", cursor: "pointer" }}
     >
       <UploadOutlined style={{ fontSize: "48px", marginBottom: "10px" }} />
-      <h4>Subir Imagen del Código QR</h4>
+      <Title level={4}>Subir Imagen del Código QR</Title>
       <input
         type="file"
         accept="image/*"
