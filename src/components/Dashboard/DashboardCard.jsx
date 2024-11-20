@@ -1,24 +1,40 @@
 import { Card } from "antd";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { CheckOutlined, ExclamationOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import CustomSpeedometer from "./CustomSpedometer";
+import attriburesMap from "../../utils/attributesMap";
 import { tailwindColorOptions } from "../../utils/colorOptions";
 
-const DashboardCard = ({ colorOption, title, value }) => {
-    const [isStable, setIsStable] = useState(true);
+const DashboardCard = ({colorOption, title, value, minimum, maximum }) => {
+    const [isStable, setIsStable] = useState(value >= minimum && value <= maximum);
 
-    const textColor = "text-white";
-    const estableSpanStyle = "text-base text-white";
+    // Map the title to a descriptive name from attriburesMap
+    const mappedTitle = attriburesMap.get(title) || title;
 
     return (
-        <Card className={`${tailwindColorOptions[colorOption]} size-full relative`}>
-            <Card.Meta title={<span className={textColor}>{title}</span>} />
-            <p className={textColor}>{value}</p>
-            <span className={estableSpanStyle}>
-                {isStable ? "estable" : "fuera de rango"}
-            </span>
-            <div className="absolute bottom-4 right-4 bg-white text-black rounded-full p-2 px-3">
-                {isStable ? <CheckOutlined className="text-green-900" /> : <CloseOutlined className="text-red-900" />}
+        <Card
+            className={`size-full relative shadow-lg rounded-lg border-bgContainer2-300`}
+        >
+            <div className="flex items-center justify-between">
+                <Card.Meta
+                    title={
+                        <span className="text-lg font-bold">
+                            {mappedTitle}
+                        </span>
+                    }
+                />
+               <div
+                    className={`flex items-center justify-center w-10 h-10 rounded-full border-2 border-error-500`}
+                >
+                    {isStable ? (
+                        <CheckOutlined className="text-green-500 text-xl" />
+                    ) : (
+                        <ExclamationOutlined className="text-yellow-500 text-xl" />
+                    )}
+                </div>
             </div>
+            <CustomSpeedometer value={value} minimum={minimum} maximum={maximum} />
+
         </Card>
     );
 };

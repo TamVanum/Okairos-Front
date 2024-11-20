@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Dropdown, Modal, QRCode, Spin, Typography } from "antd";
 import DashboardCard from "../../components/Dashboard/DashboardCard";
-import MultiAxisLineChart from "../../components/Dashboard/HidroponicsChart";
+import HidroponicsChart from "../../components/Dashboard/HidroponicsChart";
 import CustomSpedometer from "../../components/Dashboard/CustomSpedometer";
 import 'tailwindcss/tailwind.css';
 import { io } from 'socket.io-client';
@@ -10,6 +10,7 @@ import { LoadingOutlined, SettingOutlined } from '@ant-design/icons';
 import axiosInstance from '../../api/AxiosInstance';
 import MetricSelectionModal from '../../components/HydroponicsList/MetricSelectionModal';
 import usePlantMetricsStore from "../../contexts/MetricsDataContext";
+import CustomBooleanSpeedometer from "../../components/Dashboard/CustomBooleanSpeedometer";
 
 const socketUrl = import.meta.env.VITE_SOCKET_URL;
 
@@ -25,6 +26,7 @@ const PlantDashboard = () => {
     const [selectedMetricData, setSelectedMetricData] = useState(null);
     const [selectedHydroponicId, setSelectedHydroponicId] = useState(null);
     const [isChangeMetricModalOpen, setIsChangeMetricModalOpen] = useState(false);
+    const [hidroponycPlantHistoryData, setHidroponycPlantHistoryData] = useState({})
     const { hydroponicId } = useParams();
     const { currentCycle } = useParams();
 
@@ -42,12 +44,48 @@ const PlantDashboard = () => {
         try {
             const response = await axiosInstance.get(`/hydroponic/metrics/${hydroponicId}/in-use`);
             setMetrics(response.data);
-            console.log(response.data);
         } catch (error) {
             console.error(error);
         }
     };
 
+    const handleGetHydroponicPlantHistory = async () => {
+        try {
+            const response = await axiosInstance.get(`/plant-history/actual/${hydroponicId}`);
+            setHidroponycPlantHistoryData(response.data.plantHistory || []);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    const handleSocketMessage = (msg) => {
+        try {
+            console.log('Received socket message:', msg);
+
+            if (msg && msg.message) {
+                setMsgData(msg.message);
+
+                // Update graph data dynamically
+                setHidroponycPlantHistoryData((prevGraphData) => {
+                    const newDataPoint = {
+                        water_flow: msg.message.water_flow,
+                        water_temperature: msg.message.water_temperature,
+                        ambient_temperature: msg.message.ambient_temperature,
+                        ph_level: msg.message.ph_level,
+                        electrical_conductivity: msg.message.electrical_conductivity,
+                        timestamp: msg.message.timestamp,
+                    };
+
+                    return [...prevGraphData, newDataPoint];
+                });
+            }
+
+            setMessages((prevMessages) => [...prevMessages, msg]);
+        } catch (error) {
+            console.error('Error handling socket message:', error);
+        }
+    };
     useEffect(() => {
         if (hydroponicId) {
             if (!scoket.connected) {
@@ -60,7 +98,7 @@ const PlantDashboard = () => {
                     if (msg && msg.message) {
                         setMsgData(msg.message);
                     }
-
+                    handleSocketMessage(msg);
                     setMessages(prevMessages => [...prevMessages, msg]);
                 } catch (e) {
                     console.error(`error recibiendo el mensage en el dashboard`, e);
@@ -81,6 +119,7 @@ const PlantDashboard = () => {
     // Fetch hydroponic metrics on load
     useEffect(() => {
         handleGetHydroponicMetrics();
+        handleGetHydroponicPlantHistory();
     }, [hydroponicId]);
 
     // Fetch plant metrics from Zustand store
@@ -160,29 +199,42 @@ const PlantDashboard = () => {
                         </Dropdown>
                     </div>
                     <hr className='mt-4' />
-                    <div className="flex flex-col lg:flex-row p-4 gap-4">
-                        <div className="lg:w-4/5 flex items-center justify-center p-4">
-                            <MultiAxisLineChart />
-                        </div>
-                        <div className="lg:w-1/5 flex flex-col items-center justify-center p-2 gap-2">
-                            <DashboardCard colorOption={1} title="Flujo del agua" value={msgData.water_flow ? 'Activo' : 'Inactivo'} />
-                            <DashboardCard colorOption={2} title="Temperatura del agua" value={`${msgData.water_temperature} °C`} />
-                            <DashboardCard colorOption={3} title="Temperatura ambiente" value={`${msgData.ambient_temperature} °C`} />
-                            <DashboardCard colorOption={4} title="Nivel de pH" value={msgData.ph_level} />
-                            <DashboardCard colorOption={5} title="Conductividad" value={`${msgData.electrical_conductivity} μS/cm`} />
+                    <div className="flex flex-col lg:flex-row p-2 lg:p-4 gap-2 lg:gap-4">
+                        <div className="flex items-center justify-center p-2 lg:p-4 w-full h-screen">
+                            <HidroponicsChart plantHistory={hidroponycPlantHistoryData} />
                         </div>
                     </div>
-
-                    <div className="flex flex-wrap justify-center gap-12 mt-6">
-                        {metrics.attributes?.map((metric) => (
+                    <div className="flex flex-wrap justify-center gap-12">
+                        {metrics.attributes?.map((metric, index) => (
                             <div key={metric.name} className='flex flex-col text-center'>
-                                <Typography.Text className='font-semibold text-lg' >{metric.name}</Typography.Text>
-                                <CustomSpedometer value={parseFloat(msgData[metric.name])} minimum={metric.minimum} maximum={metric.maximum} />
+                                <DashboardCard
+                                    colorOption={(index % 5) + 1}
+                                    key={metric.name}
+                                    title={metric.name}
+                                    value={parseFloat(msgData[metric.name])}
+                                    minimum={metric.minimum}
+                                    maximum={metric.maximum}
+                                />
                             </div>
                         ))}
+                        <div className='flexflex-col text-center'>
+                            <CustomBooleanSpeedometer
+                                key="water_flow"
+                                title="Flujo de Agua"
+                                value={msgData.water_flow}
+                            />
+                        </div>
+                        <div className='flex flex-col text-center'>
+                            <CustomBooleanSpeedometer
+                                key="water_level"
+                                title="Nivel de Agua"
+                                value={true}
+                            />
+                        </div>
                     </div>
 
-                    <Card title="Métricas de la planta" className="w-full max-w-2xl mx-auto mt-4">
+                    <div className='mt-72'></div>
+                    {/* <Card title="Métricas de la planta" className="w-full max-w-2xl mx-auto mt-4">
                         <div className="flex flex-col gap-4">
                             {metrics.attributes?.map((metric) => (
                                 <div key={metric.name} className="flex justify-between">
@@ -192,7 +244,7 @@ const PlantDashboard = () => {
                                 </div>
                             ))}
                         </div>
-                    </Card>
+                    </Card> */}
 
                     <MetricSelectionModal
                         isModalOpen={isChangeMetricModalOpen}

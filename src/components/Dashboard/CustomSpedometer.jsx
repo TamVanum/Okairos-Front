@@ -8,10 +8,8 @@ const { Text } = Typography;
 const CustomSpeedometer = ({ value, minimum, maximum }) => {
     const metricDiff = maximum - minimum;
 
-    // Calcular el nuevo mínimo y máximo en función del rango
     const minimumMetricDiff = minimum - (metricDiff * 2);
     const maximumMetricDiff = maximum + (metricDiff * 2);
-
     const secondMinimumMetricDiff = minimum - metricDiff;
     const secondMaximumMetricDiff = maximum + metricDiff;
 
@@ -29,7 +27,6 @@ const CustomSpeedometer = ({ value, minimum, maximum }) => {
                     `#ecdb23`,
                     `#f6961e`,
                 ]}
-                // Calculamos los stops de los segmentos basados en el nuevo mínimo y máximo
                 customSegmentStops={[
                     minimumMetricDiff, 
                     secondMinimumMetricDiff, 
@@ -48,6 +45,7 @@ const CustomSpeedometer = ({ value, minimum, maximum }) => {
                 ringWidth={30}
             />
         </div>
+        
     );
 }
 export default CustomSpeedometer;
