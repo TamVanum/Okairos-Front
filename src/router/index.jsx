@@ -19,6 +19,7 @@ import Home from "../pages/Home";
 import Metrics from "../pages/Customer/Metrics";
 import LinkHydroponic from "../pages/Customer/LinkHydroponic";
 import ChartHydroTest from "../pages/ChartHydroTest";
+import CreateUserConfirmation from "../pages/User/CreateUserConfirmation";
 
 
 const routes = createRoutesFromElements(
@@ -28,6 +29,11 @@ const routes = createRoutesFromElements(
         <Route path="/chart-test" element={<ChartHydroTest />} />
         <Route path="/test" element={<WebSocketsTestPage roomId={"device1"} />} />
         <Route path="/test2" element={<WebSocketsTestPage roomId={2} />} />
+        
+        <Route path="/confirmation-account/:userIntentId" element={<CreateUserConfirmation />} />
+
+
+
         <Route path="/landing" element={<LandingLayout />} >
             <Route index element={<LandingPage />} />
         </Route>

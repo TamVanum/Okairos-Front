@@ -1,82 +1,147 @@
-import { ConfigProvider, Table, Tag, Tooltip, Typography } from "antd";
-import { Link } from "react-router-dom";
-import { SearchOutlined } from "@ant-design/icons";
-
-const dataSource = [
-    {
-        key: '1',
-        name: 'Mike',
-        last_name: 'Doe',
-        email: 'example1@gmail.com',
-        plan: 'Plan Pro',
-        application_date: 32,
-    },
-    {
-        key: '2',
-        name: 'John',
-        last_name: 'Doe',
-        email: 'example1@gmail.com',
-        plan: 'Plan Basico',
-        application_date: 42,
-    },
-];
-
-const columns = [
-    {
-        title: 'Nombre',
-        dataIndex: 'name',
-        key: 'name',
-
-    },
-    {
-        title: 'Apellido',
-        dataIndex: 'last_name',
-        key: 'last_name',
-        responsive: ['lg'],
-    },
-    {
-        title: 'Correo',
-        dataIndex: 'email',
-        key: 'email',
-    },
-    {
-        title: 'Fecha de solicitud',
-        dataIndex: 'application_date',
-        key: 'application_date',
-        defaultSortOrder: 'descend',
-        sorter: (a, b) => a.planting_date - b.planting_date,
-    },
-    {
-        title: 'Plan',
-        dataIndex: 'plan',
-        key: 'plan',
-        defaultSortOrder: 'descend',
-    },
-    {
-        title: 'Detalle',
-        dataIndex: 'detail',
-        key: 'detail',
-        render: () => (
-            <Link to={`/admin/user-request/${1}`}>
-                <div className="flex items-center justify-center w-fit rounded-full bg-orange-400  hover:bg-primary-500 cursor-pointer">
-                    <SearchOutlined className="text-3xl m-1.5 text-white" />
-                </div>
-            </Link>
-        ),
-    },
-];
+import React, { useEffect, useState } from "react";
+import { Table, Tabs, Button, Tag, message, Tooltip } from "antd";
+import axios from "axios";
+import axiosInstance from "../../api/AxiosInstance"
+const { TabPane } = Tabs;
 
 const UserRequestList = () => {
-    return (
-        // <ConfigProvider locale={customLocale}>
-        <div className="flex justify-center rounded-xl">
-            <div className="flex flex-col w-full  p-6 rounded-lg">
-                <Typography.Title level={2}>Mis Plantas</Typography.Title>
-                <Table className="w-full" dataSource={dataSource} columns={columns} />;
-            </div>
-        </div>
-        // </ConfigProvider>
-    );
-}
+  const [requests, setRequests] = useState([]);
+  const [planFilterOptions, setPlanFilterOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/usersIntents");
+        setRequests(response.data);
+
+        const uniquePlans = [...new Map(response.data.map((req) => [req.plan.id, req.plan])).values()];
+        setPlanFilterOptions(uniquePlans);
+      } catch (error) {
+        console.error("Error fetching user requests:", error);
+        message.error("Error al cargar las solicitudes de usuarios.");
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
+  const updateRequestStatus = async (id, status) => {
+    try {
+      await axiosInstance.patch(`/usersIntents/${id}`, { status });
+      message.success(`Solicitud ${status === "approved" ? "aprobada" : "rechazada"} con éxito.`);
+
+      const response = await axios.get("/usersIntents");
+      setRequests(response.data);
+    } catch (error) {
+      console.error("Error updating request status:", error);
+      message.error("Error al actualizar la solicitud.");
+    }
+  };
+
+  // Group requests by status
+  const groupedRequests = {
+    pending: requests.filter((req) => req.status === "pending"),
+    approved: requests.filter((req) => req.status === "approved"),
+    rejected: requests.filter((req) => req.status === "rejected"),
+  };
+
+  // Table columns
+  const columns = [
+    {
+      title: "Nombre",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Apellido",
+      dataIndex: "lastname",
+      key: "lastname",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Teléfono",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Plan",
+      dataIndex: "plan",
+      key: "plan",
+      filters: planFilterOptions.map((plan) => ({
+        text: `${plan.title} (${plan.price} ${plan.period})`,
+        value: plan.id,
+      })),
+      onFilter: (value, record) => record.plan.id === value,
+      render: (plan) => (
+        <Tooltip title={`Capacidad: ${plan.hydroponicCapacity} hidroponicos`}>
+          <Tag color="blue">
+            {plan.title} ({plan.price} {plan.period})
+          </Tag>
+        </Tooltip>
+      ),
+    },
+    {
+      title: "Acciones",
+      key: "actions",
+      render: (_, record) =>
+        record.status === "pending" && (
+          <div className="flex gap-2">
+            <Button
+              type="primary"
+              onClick={() => updateRequestStatus(record.id, "approved")}
+            >
+              Aprobar
+            </Button>
+            <Button
+              type="danger"
+              onClick={() => updateRequestStatus(record.id, "rejected")}
+            >
+              Rechazar
+            </Button>
+          </div>
+        ),
+    },
+  ];
+
+  return (
+    <div className="p-6 min-h-screen bg-gray-50">
+      <h1 className="text-2xl font-bold mb-4">Solicitudes de Usuarios</h1>
+
+      <Tabs defaultActiveKey="pending">
+        <TabPane tab="Pendientes" key="pending">
+          <Table
+            dataSource={groupedRequests.pending}
+            columns={columns}
+            rowKey={(record) => record.id}
+            bordered
+            className="w-full"
+          />
+        </TabPane>
+        <TabPane tab="Aprobados" key="approved">
+          <Table
+            dataSource={groupedRequests.approved}
+            columns={columns.filter((col) => col.key !== "actions")} // Remove actions column
+            rowKey={(record) => record.id}
+            bordered
+            className="w-full"
+          />
+        </TabPane>
+        <TabPane tab="Rechazados" key="rejected">
+          <Table
+            dataSource={groupedRequests.rejected}
+            columns={columns.filter((col) => col.key !== "actions")}
+            rowKey={(record) => record.id}
+            bordered
+            className="w-full"
+          />
+        </TabPane>
+      </Tabs>
+    </div>
+  );
+};
 
 export default UserRequestList;
