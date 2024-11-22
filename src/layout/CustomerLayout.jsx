@@ -9,7 +9,7 @@ import { Button, Layout, Menu, theme, Tooltip } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
 import UserProfileCard from '../components/common/UserProfileCard';
-import temporalLogo from '../assets/react.svg';
+import logo from '../assets/logo.svg';
 
 
 import { useNavigate } from 'react-router-dom';
@@ -66,7 +66,7 @@ const CustomerLayout = () => {
             {/* <Layout className='bg-gray-50' style={{ marginLeft: isMobile && collapsed ? 0 : siderWidth, transition: 'margin-left 0.2s' }}> */}
             <Layout className='bg-bgContainer2-300' style={{ marginLeft: isMobile ? 0 : siderWidth, transition: 'margin-left 0.2s' }}>
                 <div className="flex my-4 mx-4 bg-primary-500 rounded-lg p-6 items-center justify-between">
-                    <img className="h-fit" src={temporalLogo} alt="Logo" />
+                    <img className="h-fit w-fit" src={logo} alt="Logo" />
                     <Tooltip title="Cerrar Sesion">
                         <div className="flex items-center justify-center rounded-full bg-white hover:bg-gray-300 cursor-pointer">
                             <LogoutOutlined className="text-3xl m-1.5 text-error-500" onClick={() => handleLogout()} />

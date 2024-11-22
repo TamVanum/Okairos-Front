@@ -11,7 +11,7 @@ const UserRequestList = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/usersIntents");
+        const response = await axiosInstance.get("/usersIntents");
         setRequests(response.data);
 
         const uniquePlans = [...new Map(response.data.map((req) => [req.plan.id, req.plan])).values()];
@@ -25,12 +25,29 @@ const UserRequestList = () => {
     fetchRequests();
   }, []);
 
+  const sendConfirmationMail = async (email, userIntentId) => {
+    try {
+      const response = await axiosInstance.post(`/usersIntents/confirmation-mail`, { email, userIntentId });
+      message.success("Correo de confirmación enviado.");
+    } catch (error) {
+      console.error("Error sending the confirmation mail:", error);
+      message.error("Error al enviar correo de confirmacion.");
+    }
+  }
+
   const updateRequestStatus = async (id, status) => {
     try {
       await axiosInstance.patch(`/usersIntents/${id}`, { status });
       message.success(`Solicitud ${status === "approved" ? "aprobada" : "rechazada"} con éxito.`);
-
-      const response = await axios.get("/usersIntents");
+      if (status === "approved") {
+        const userIntent = requests.find((req) => req.id === id); // Find userIntent details
+        if (userIntent) {
+          await sendConfirmationMail(userIntent.email, userIntent.id);
+        } else {
+          console.warn(`UserIntent with id ${id} not found.`);
+        }
+      }
+      const response = await axiosInstance.get("/usersIntents");
       setRequests(response.data);
     } catch (error) {
       console.error("Error updating request status:", error);

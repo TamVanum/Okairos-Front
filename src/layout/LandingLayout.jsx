@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { Outlet } from 'react-router-dom';
-import temporalLogo from '../assets/react.svg';
+import logo from '../assets/logo.svg';
 
 const { Header, Content, Footer } = Layout;
 
@@ -25,7 +25,7 @@ const LandingLayout = () => {
     return (
         <Layout>
             <Header className='bg-bgContainer-200 ' style={{ display: 'flex', alignItems: 'center' }}>
-                <img className="h-fit sm:ml-2 md:ml20 lg:ml-20 mr-4" src={temporalLogo} alt="Logo" />
+                <img className="h-fit sm:ml-2 md:ml20 lg:ml-20 mr-4" src={logo} alt="Logo" />
                 <Menu
                     theme="light"
                     mode="horizontal"

@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Form, Input, Button, message, Spin } from "antd";
 import axiosInstance from "../../api/AxiosInstance";
+import Swal from "sweetalert2";
 
 const CreateUserConfirmation = () => {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
+    const navigate = useNavigate();
 
     const { userIntentId } = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
             if (!userIntentId) {
-                message.error("User Intent ID is missing");
+                message.error("Falta el ID de intención de usuario");
                 return;
             }
 
@@ -24,7 +26,7 @@ const CreateUserConfirmation = () => {
                 setUserData(response.data);
                 console.log(response.data);
             } catch (error) {
-                message.error("Failed to fetch user intent data");
+                message.error("No se pudo obtener la información de la intención de usuario");
             } finally {
                 setLoading(false);
             }
@@ -35,7 +37,7 @@ const CreateUserConfirmation = () => {
 
     const onFinish = async (values) => {
         if (!userData) {
-            message.error("No user data available for submission");
+            message.error("No hay datos de usuario disponibles para enviar");
             return;
         }
 
@@ -47,9 +49,16 @@ const CreateUserConfirmation = () => {
         setLoading(true);
         try {
             await axiosInstance.post(`/users/customer`, postData);
-            message.success("User created successfully!");
+            Swal.fire({
+                title: "¡Éxito!",
+                text: "Tu cuenta ha sido creada exitosamente.",
+                icon: "success",
+                confirmButtonText: "OK",
+                timer: 2000, // Cierra automáticamente después de 2 segundos
+                willClose: () => navigate("/login"), // Redirige a /login después de cerrar
+            });
         } catch (error) {
-            message.error("Failed to create user");
+            message.error("No se pudo crear el usuario");
         } finally {
             setLoading(false);
         }
@@ -65,7 +74,7 @@ const CreateUserConfirmation = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-            <h1 className="text-2xl font-bold mb-6">Create User</h1>
+            <h1 className="text-2xl font-bold mb-6">Crear Usuario</h1>
             <Form
                 form={form}
                 onFinish={onFinish}
@@ -73,44 +82,44 @@ const CreateUserConfirmation = () => {
                 className="bg-white p-6 rounded shadow-lg w-full max-w-md"
             >
                 <Form.Item
-                    label="Password"
+                    label="Contraseña"
                     name="password"
                     rules={[
-                        { required: true, message: "Please enter your password" },
-                        { min: 6, message: "Password must be at least 6 characters" },
+                        { required: true, message: "Por favor, introduce tu contraseña" },
+                        { min: 6, message: "La contraseña debe tener al menos 6 caracteres" },
                     ]}
                 >
                     <Input.Password
-                        placeholder="Enter your password"
+                        placeholder="Introduce tu contraseña"
                         autoComplete="new-password"
                     />
                 </Form.Item>
 
                 <Form.Item
-                    label="Confirm Password"
+                    label="Confirmar Contraseña"
                     name="confirmPassword"
                     dependencies={["password"]}
                     rules={[
-                        { required: true, message: "Please confirm your password" },
+                        { required: true, message: "Por favor, confirma tu contraseña" },
                         ({ getFieldValue }) => ({
                             validator(_, value) {
                                 if (!value || getFieldValue("password") === value) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject(new Error("Passwords do not match"));
+                                return Promise.reject(new Error("Las contraseñas no coinciden"));
                             },
                         }),
                     ]}
                 >
                     <Input.Password
-                        placeholder="Confirm your password"
+                        placeholder="Confirma tu contraseña"
                         autoComplete="new-password"
                     />
                 </Form.Item>
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit" block loading={loading}>
-                        Create User
+                        Crear Usuario
                     </Button>
                 </Form.Item>
             </Form>

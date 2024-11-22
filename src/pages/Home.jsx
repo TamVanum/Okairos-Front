@@ -1,5 +1,5 @@
 import { Card, Carousel, Typography } from "antd";
-import temporalLogo from '../assets/aaaaaa.jpg';
+import logo from '../assets/aaaaaa.jpg';
 import Meta from "antd/es/card/Meta";
 import p1 from "../assets/p1.webp";
 import p2 from "../assets/p2.webp";
