@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Input, Button, notification, Card, Tag, Select, Menu, Dropdown } from 'antd';
+import { Input, Button, notification, Card, Tag, Skeleton } from 'antd';
 import UserProfile from '../../components/UserProfileForm/UserProfile';
 import { useUser } from '../../hooks/useUser';
 import axiosInstance from '../../api/AxiosInstance';
-import { SettingOutlined } from '@ant-design/icons';
 
 const UserProfileSchema = Yup.object().shape({
   name: Yup.string().required('El nombre es obligatorio'),
@@ -16,6 +15,25 @@ const UserProfileSchema = Yup.object().shape({
 const UserProfileForm = () => {
   const { userData, updateUserData } = useUser();
   const [avatar, setAvatar] = useState(null);
+  const [linkedHydroponics, setLinkedHydroponics] = useState(0);
+
+  useEffect(() => {
+    // Fetch linked hydroponics count
+    const fetchHydroponicCount = async () => {
+      try {
+        const response = await axiosInstance.get('/users/me/hydroponic/');
+        setLinkedHydroponics(response.data.vinculados);
+      } catch (error) {
+        console.error('Error fetching hydroponic count:', error);
+        notification.error({
+          message: 'Error al cargar los hidroponicos vinculados',
+          description: 'No se pudo obtener el número de hidroponicos vinculados.',
+        });
+      }
+    };
+
+    fetchHydroponicCount();
+  }, []);
 
   const handleAvatarChange = (event) => {
     const file = event.currentTarget.files[0];
@@ -54,7 +72,6 @@ const UserProfileForm = () => {
         message: 'Perfil Actualizado',
         description: 'Los datos del perfil han sido actualizados exitosamente.',
       });
-
     } catch (error) {
       console.error('Error al actualizar el perfil:', error);
       notification.error({
@@ -66,13 +83,16 @@ const UserProfileForm = () => {
     }
   };
 
+  // Extract relevant plan data
+  const plan = userData.plan || {};
+  const totalHydroponicCapacity = plan.hydroponicCapacity || 0;
+  const remainingHydroponics = totalHydroponicCapacity - linkedHydroponics;
 
   return (
     <div className="flex flex-col lg:flex-row justify-center mx-6 my-10 lg:mx-20 lg:my-20 gap-6 lg:gap-10">
 
-      {/* Columna izquierda - Formulario de perfil */}
+      {/* Left Column - Profile Form */}
       <div className="flex flex-col items-center justify-center p-6 border-2 border-error-200 rounded-xl w-full lg:w-1/2 xl:w-1/3">
-
         <UserProfile user={userData} onEditAvatar={handleAvatarChange} />
         <Formik
           initialValues={{ name: userData.name, lastname: userData.lastname, email: userData.email }}
@@ -117,18 +137,23 @@ const UserProfileForm = () => {
         </Formik>
       </div>
 
-      {/* Columna derecha - Tarjetas adicionales */}
+      {/* Right Column - Additional Information */}
       <div className="flex flex-col gap-6 w-full lg:w-1/2 xl:w-1/3">
         <Card title="Estado de Cuenta" bordered={false}>
-          <p>Plan actual: <Tag color="magenta">Plan</Tag></p>
-          <p>Costo mensual: $50.000</p>
+          <p>Plan actual: <Tag color="magenta">{plan.title || "No definido"}</Tag></p>
+          <p>Descripción del plan: {plan.subtitle || "N/A"}</p>
+          <p>Costo mensual: {plan.price ? `$${plan.price} ${plan.period}` : "No definido"}</p>
         </Card>
         <Card title="Hydroponicos Vinculados" bordered={false}>
-          <p>Vinculados: 2</p>
-          <p>Restantes: 8</p>
-        </Card>
-        <Card title="Metricas" bordered={false}>
-          <p>Metricas creadas: 4</p>
+          {linkedHydroponics === 0 && remainingHydroponics === totalHydroponicCapacity ? (
+            <Skeleton active paragraph={{ rows: 3 }} />
+          ) : (
+            <>
+              <p>Vinculados: {linkedHydroponics}</p>
+              <p>Restantes: {remainingHydroponics >= 0 ? remainingHydroponics : 0}</p>
+              <p>Capacidad Total: {totalHydroponicCapacity}</p>
+            </>
+          )}
         </Card>
       </div>
     </div>

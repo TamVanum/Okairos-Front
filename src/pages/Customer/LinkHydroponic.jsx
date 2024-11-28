@@ -34,25 +34,51 @@ const LinkHydroponic = () => {
       });
 
       if (response.status === 200) {
-        setModalContent("Hidropónico vinculado exitosamente");
-        setIsSuccess(true);
-
-        setTimeout(() => {
-          setModalVisible(false);
-          navigate("/customer/plants");
-        }, 2000);
-      } else {
-        setModalContent("Ocurrió un error al vincular el hidropónico");
-        setIsSuccess(false);
+        handleSuccess("Hidropónico vinculado exitosamente");
+        return;
       }
-      setModalVisible(true);
+
+      handleError("Ocurrió un error al vincular el hidropónico");
     } catch (error) {
-      console.error("Error en la petición:", error);
-      setModalContent("Ocurrió un error al vincular el hidropónico");
-      setIsSuccess(false);
-      setModalVisible(true);
+      handleServerError(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSuccess = (message) => {
+    setModalContent(message);
+    setIsSuccess(true);
+    setModalVisible(true);
+
+    setTimeout(() => {
+      setModalVisible(false);
+      navigate("/customer/plants");
+    }, 2000);
+  };
+
+  const handleError = (message) => {
+    setModalContent(message);
+    setIsSuccess(false);
+    setModalVisible(true);
+  };
+
+  const handleServerError = (error) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 403:
+          handleError(
+            "Máxima capacidad de hidropónicos alcanzados, recuerda que siempre puedes mejorar tu plan"
+          );
+          break;
+        case 409:
+          handleError("Ya tienes este hidropónico vinculado a tu cuenta");
+          break;
+        default:
+          handleError("Ocurrió un error al vincular el hidropónico");
+      }
+    } else {
+      handleError("Ocurrió un error inesperado. Por favor, inténtalo de nuevo.");
     }
   };
 

@@ -95,12 +95,12 @@ const PlansMaintainer = () => {
           rowKey={(record) => record.id}
           bordered
           scroll={{ x: 800 }}
-          className="w-full"
+          className="w-full bg-bgContainer2-100 rounded-xl"
         />
       </div>
 
       <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-2">Vista previa de la página de planes</h2>
+        <h2 className="text-xl font-semibold mb-2">Vista previa de Landing Page sección de planes</h2>
         <iframe
           ref={iframeRef}
           src="http://localhost:4321/#plans"

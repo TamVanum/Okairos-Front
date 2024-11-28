@@ -1,4 +1,4 @@
-import { Button, Card, ConfigProvider, Spin, Table, Typography } from "antd";
+import { Button, Card, ConfigProvider, Empty, Spin, Table, Typography } from "antd";
 import { Link } from "react-router-dom";
 import { SearchOutlined, ExclamationOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -122,7 +122,7 @@ const PlantList = () => {
 
     return (
         <div className="mx-16 my-20">
-            {hydroponicData.length > 0 && (
+            {hydroponicData.length > 0 ? (
                 <div className="flex justify-center rounded-xl">
                     <div className="flex flex-col w-full rounded-lg">
                         <Typography.Title level={2}>Mis Plantas</Typography.Title>
@@ -138,6 +138,10 @@ const PlantList = () => {
                         plantMetricData={plantMetricData} // Now comes from Zustand
                         selectedHydroponicId={selectedHydroponicId}
                     />
+                </div>
+            ) : (
+                <div className="flex justify-center items-center h-64">
+                    <Empty description="No hay hidroponicos asociados" />
                 </div>
             )}
         </div>

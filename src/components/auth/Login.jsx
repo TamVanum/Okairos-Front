@@ -1,12 +1,12 @@
 import React from 'react';
-import { Card, Input, Button, Typography } from 'antd';
+import { Card, Input, Button, Typography, Image } from 'antd';
 import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import AuthService from '../../services/AuthService';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/temporalLogo.svg';
+import logo from '../../assets/logo.svg';
+import logo_text from '../../assets/text_logo.svg';
 import useAuthStore from '../../contexts/AuthContext';
-import axios from 'axios';
 import axiosInstance from '../../api/AxiosInstance';
 
 const { Title } = Typography;
@@ -44,7 +44,7 @@ function Login() {
             } else {
                 navigate('/customer');
             }
-            
+
         } catch (error) {
             console.error('Error durante el proceso de autenticación:', error);
         } finally {
@@ -54,13 +54,14 @@ function Login() {
 
     return (
         <div className="flex h-screen flex-col lg:flex-row">
-            <div className="lg:w-1/4 bg-green-600 flex items-center justify-center p-8">
-                <Title className="text-white" level={2}>Bienvenido</Title>
+            <div className="lg:w-1/2 bg-bgContainer-300 flex flex-row items-center justify-center p-8">
+                <img src={logo} className="w-full" alt="logo" />
             </div>
-            <div className="lg:w-3/4 flex items-center justify-center p-8 content-center">
-                <Card className="w-full max-w-md shadow-lg ">
-                    {/* <img src={logo} className='size-48 justify-center' alt="" /> */}
-                    <Title level={2} className="text-center">Iniciar sesión</Title>
+            <div className="lg:w-1/2 flex items-center justify-center p-8 content-center bg-bgContainer-300">
+                <div className="w-full max-w-md bg-bgContainer-100 shadow-lg rounded-lg p-8">
+                    <div className="text-center mb-5">
+                        <img src={logo_text} className="w-40 mx-auto mb-3" alt="logo text" />
+                    </div>
                     <Formik
                         initialValues={{ email: '', password: '' }}
                         validationSchema={LoginSchema}
@@ -69,28 +70,46 @@ function Login() {
                         {formik => (
                             <FormikForm className="space-y-4">
                                 <div>
-                                    <label htmlFor="email">Email:</label>
+                                    <label htmlFor="email" className="block font-medium font-sans text-primary-500">Email:</label>
                                     <Field
                                         name="email"
                                         as={Input}
+                                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                                     />
                                     <ErrorMessage name="email" component="div" className="text-red-500 text-xs mt-1" />
                                 </div>
                                 <div>
-                                    <label htmlFor="password">Contraseña:</label>
+                                    <label htmlFor="password" className="block font-medium font-sans text-primary-500">Contraseña:</label>
                                     <Field
                                         name="password"
                                         as={Input.Password}
+                                        className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
                                     />
                                     <ErrorMessage name="password" component="div" className="text-red-500 text-xs mt-1" />
                                 </div>
-                                <Button type="primary" htmlType="submit" className="w-full" disabled={formik.isSubmitting}>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-md disabled:opacity-50"
+                                    disabled={formik.isSubmitting}
+                                >
                                     Iniciar sesión
                                 </Button>
+                                <button
+                                    type="button"
+                                    className="w-full text-primary-500 text-sm mt-2 hover:underline"
+                                    onClick={() => navigate('/forgot-password')}
+                                >
+                                    ¿Olvidaste tu contraseña?
+                                </button>
                             </FormikForm>
                         )}
                     </Formik>
-                </Card>
+                </div>
+
+            </div>
+            <div className="lg:w-1/2 bg-bgContainer-300 flex flex-row items-center justify-center p-8">
+                <img src={logo} className="w-full" alt="logo" />
             </div>
         </div>
     );

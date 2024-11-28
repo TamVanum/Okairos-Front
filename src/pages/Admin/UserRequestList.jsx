@@ -125,7 +125,7 @@ const UserRequestList = () => {
   ];
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50">
+    <div className="p-6 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Solicitudes de Usuarios</h1>
 
       <Tabs defaultActiveKey="pending">
@@ -135,7 +135,7 @@ const UserRequestList = () => {
             columns={columns}
             rowKey={(record) => record.id}
             bordered
-            className="w-full"
+            className="w-full bg-bgContainer2-100 rounded-xl"
           />
         </TabPane>
         <TabPane tab="Aprobados" key="approved">
@@ -144,7 +144,7 @@ const UserRequestList = () => {
             columns={columns.filter((col) => col.key !== "actions")} // Remove actions column
             rowKey={(record) => record.id}
             bordered
-            className="w-full"
+            className="w-full bg-bgContainer2-100 rounded-xl"
           />
         </TabPane>
         <TabPane tab="Rechazados" key="rejected">
@@ -153,7 +153,7 @@ const UserRequestList = () => {
             columns={columns.filter((col) => col.key !== "actions")}
             rowKey={(record) => record.id}
             bordered
-            className="w-full"
+            className="w-full bg-bgContainer2-100 rounded-xl"
           />
         </TabPane>
       </Tabs>

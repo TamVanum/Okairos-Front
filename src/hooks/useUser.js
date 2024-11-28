@@ -11,6 +11,7 @@ export const useUser = () => {
         lastname: user.lastname || 'default',
         email: user.email || 'example@gmail.com',
         avatar: user.avatar || 'D',
+        plan: user.plan || {},
     }) ;
 
     const updateUserData = (data) => {
